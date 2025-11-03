@@ -1,0 +1,444 @@
+/* frontend/styles.css - Estilo Aséptico y Futurista MODIFICADO */
+
+:root {
+    /* Paleta de colores: Alto contraste con acento neón */
+    --color-bg: #0C0C0C;            /* Fondo muy oscuro / negro */
+    --color-text: #EAEAEA;          /* Texto blanco brillante */
+    --color-accent: #00FFFF;        /* Cian neón para acentos (glow) */
+    --color-secondary: #505050;     /* Gris oscuro para bordes y separadores */
+    --color-success: #00FF00;       /* Verde neón para éxito */
+    --font-mono: 'Space Mono', monospace; /* Tipografía futurista/mono */
+}
+
+/* 1. Base y Tipografía */
+body {
+    font-family: var(--font-mono), sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+header {
+    background-color: var(--color-bg);
+    border-bottom: 2px solid var(--color-secondary);
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+}
+
+h1 {
+    font-size: 2em;
+    color: var(--color-accent);
+    text-shadow: 0 0 5px var(--color-accent);
+}
+
+h2, h3 {
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-top: 0;
+    border-bottom: 1px dashed var(--color-secondary);
+    padding-bottom: 5px;
+}
+
+hr {
+    border: none;
+    border-top: 1px dashed var(--color-secondary);
+    margin: 20px 0;
+}
+
+/* 2. Layout */
+#main-container {
+    display: flex;
+    max-width: 1800px; /* Ancho máximo MUCHO más grande */
+    margin: 30px auto;
+    gap: 30px;
+    padding: 0 15px;
+}
+
+#left-panel, #right-panel {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--color-secondary);
+    border-radius: 4px;
+    padding: 25px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+#left-panel {
+    flex: 1.1; /* Aumenta la proporción del panel izquierdo */
+}
+
+#right-panel {
+    flex: 1.5; /* Aumenta la proporción del panel derecho */
+    text-align: center;
+}
+
+/* NUEVO: Contenedor y Botones de Navegación Anual */
+#annual-view-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-top: 5px; /* Ajuste para centrar visualmente */
+}
+
+#annual-view-header h2 {
+    margin: 0;
+    padding: 0;
+    border-bottom: none;
+    display: inline-block;
+}
+
+#current-year-display {
+    color: var(--color-text); /* Blanco para el año actual */
+    margin-left: 5px;
+    font-size: 1.1em;
+}
+
+.year-nav-btn {
+    background: var(--color-bg);
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent);
+    padding: 5px 10px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-weight: bold;
+    font-size: 1.2em;
+    transition: all 0.2s;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2px;
+}
+
+.year-nav-btn:hover:not(:disabled) {
+    box-shadow: 0 0 8px var(--color-accent);
+    background: rgba(0, 255, 255, 0.1);
+}
+
+.year-nav-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.3;
+    border-color: var(--color-secondary);
+    color: var(--color-secondary);
+}
+
+
+/* NUEVO: Resumen de Hoy */
+#today-summary {
+    text-align: left;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid var(--color-accent);
+    box-shadow: 0 0 5px var(--color-accent);
+}
+
+#today-summary p {
+    margin: 5px 0;
+    font-size: 1em;
+}
+
+#today-summary .today-date-info {
+    color: var(--color-accent);
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+#today-summary ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+#today-summary li {
+    font-size: 0.9em;
+    padding: 3px 0;
+    border-left: 3px solid var(--color-success);
+    padding-left: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* 3. Formulario (Input/Botones) */
+#task-form input, #task-form textarea, #task-form button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid var(--color-accent);
+    border-radius: 0;
+    background-color: rgba(0, 255, 255, 0.05);
+    color: var(--color-text);
+    font-family: var(--font-mono);
+    transition: all 0.2s;
+}
+
+#task-form input:focus, #task-form textarea:focus {
+    outline: none;
+    box-shadow: 0 0 8px var(--color-accent);
+}
+
+#task-form button {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+#task-form button:hover {
+    background-color: var(--color-accent);
+    box-shadow: 0 0 15px var(--color-accent);
+}
+
+#cancel-edit {
+    background-color: var(--color-secondary) !important;
+    color: var(--color-text) !important;
+    border: 1px solid var(--color-secondary);
+}
+
+#cancel-edit:hover {
+    box-shadow: 0 0 10px var(--color-secondary);
+}
+
+/* 4. Vista Lineal Semanal */
+#weekly-view {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+    min-height: 350px; 
+}
+
+.day-column {
+    border: 1px solid var(--color-secondary);
+    padding: 10px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.02);
+    min-height: 180px;
+}
+
+.day-column h3 {
+    font-size: 1em;
+    border-bottom: none;
+    color: var(--color-text);
+    margin-bottom: 10px;
+}
+
+/* Tarea reducida a índice */
+.task-item {
+    background: rgba(0, 255, 255, 0.1);
+    padding: 4px; 
+    margin-top: 4px;
+    border-left: 3px solid var(--color-accent);
+    cursor: pointer;
+    font-size: 0.8em; 
+    position: relative;
+    transition: background-color 0.2s;
+    line-height: 1.2;
+    width: fit-content; /* Se ajusta al tamaño del número */
+    min-width: 1.2em;
+    text-align: center;
+    border-radius: 2px;
+    user-select: none;
+}
+
+.task-item span {
+    font-weight: bold;
+    display: block;
+}
+
+.task-item:hover {
+    background: rgba(0, 255, 255, 0.2);
+}
+
+/* Contenedor del desplegable al hacer click */
+.task-detail-expanded {
+    background: rgba(0, 255, 255, 0.15);
+    border: 1px dashed var(--color-accent);
+    padding: 8px;
+    margin-top: 4px;
+    margin-bottom: 8px;
+    font-size: 0.85em;
+    text-align: left;
+    white-space: normal;
+    word-wrap: break-word;
+    box-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+    z-index: 10;
+}
+
+.task-item button {
+    float: right;
+    background: transparent;
+    color: red;
+    border: none;
+    font-size: 0.8em;
+    cursor: pointer;
+    margin-left: 5px;
+    padding: 0;
+    height: auto;
+    width: auto;
+    transition: color 0.2s;
+    position: absolute;
+    top: 0;
+    right: 4px;
+    line-height: 1.2;
+}
+
+.task-item button:hover {
+    color: red;
+    box-shadow: none;
+}
+
+/* 5. Vista Donut (D3) */
+#annual-donut-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 800px; 
+    overflow: visible; 
+    padding: 10px;
+}
+
+/* Fondo de mes: capa de color bajo las semanas (Requisito 2) */
+.month-background {
+    opacity: 0.1; 
+}
+
+/* Estilo para las secciones de semanas */
+.week-slice {
+    stroke: var(--color-bg);
+    stroke-width: 1px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.week-slice:hover {
+    opacity: 0.8;
+}
+
+/* Estilos de etiquetas de mes (NUEVOS: dentro de la franja con contorno) */
+.month-label {
+    /* El color se establece en D3 (MONTH_COLORS) */
+    font-size: 0.8em;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+    /* Contorno para mejorar la legibilidad sobre el fondo oscuro */
+    text-shadow: 
+        -1px -1px 0 var(--color-bg),  
+         1px -1px 0 var(--color-bg),
+        -1px  1px 0 var(--color-bg),
+         1px  1px 0 var(--color-bg),
+         0 0 5px var(--color-bg);
+}
+
+/* Clases de color para la carga semanal (Requisito 4) */
+.task-load-none { 
+    fill: #202020; /* Gris oscuro para 0 días planificados */
+} 
+.task-load-low { 
+    fill: #FFA500; /* Naranja (1-4 días planificados) */
+} 
+.task-load-high { 
+    fill: #00FF00; /* Verde neón (5-7 días planificados) */
+} 
+
+/* Clases de estado temporal (NUEVO) */
+.past-week { 
+    fill: var(--color-bg) !important; /* Negro para semanas pasadas */
+    opacity: 0.3; 
+    stroke: var(--color-secondary) !important;
+}
+.future-or-current-week {
+    /* Permitir que los colores de carga (naranja/verde) se apliquen */
+    stroke: var(--color-accent) !important; 
+    stroke-width: 2px !important;
+}
+
+/* Regla añadida: Semanas Presentes/Futuras sin carga deben ser BLANCAS */
+.task-load-none.future-or-current-week {
+    fill: var(--color-text) !important; /* Fuerza el color blanco */
+}
+
+/* Texto central del año */
+svg text {
+    fill: var(--color-accent) !important;
+    text-shadow: 0 0 5px var(--color-accent);
+}
+
+/* 6. Popup de Resumen Semanal (Requisito 5) */
+.popup-summary {
+    position: absolute;
+    background: var(--color-bg);
+    border: 2px solid var(--color-accent);
+    padding: 18px;
+    border-radius: 4px;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    z-index: 1000;
+    display: none; 
+    text-align: left;
+    max-width: 400px;
+}
+
+.popup-summary h4 {
+    color: var(--color-accent);
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--color-secondary);
+    padding-bottom: 5px;
+}
+
+.popup-summary ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.popup-summary li {
+    padding: 3px 0;
+    font-size: 0.9em;
+    /* Estilo por defecto */
+    border-left: 3px solid var(--color-secondary);
+    padding-left: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.popup-summary .day-separator {
+    color: var(--color-accent);
+    font-weight: bold;
+    margin-top: 8px;
+    margin-bottom: 2px;
+    border-left: none; 
+    padding-left: 0;
+    white-space: normal;
+    text-shadow: 0 0 2px rgba(0, 255, 255, 0.3);
+}
+
+.popup-summary .task-detail {
+    border-left: 3px solid var(--color-secondary); 
+    color: var(--color-text);
+}
+
+.delete-popup-btn {
+    float: right;
+    background: transparent;
+    color: red;
+    border: none;
+    font-size: 0.9em;
+    cursor: pointer;
+    margin-left: 5px;
+    padding: 0;
+    height: auto;
+    width: auto;
+    transition: color 0.2s;
+    font-weight: bold;
+    font-family: var(--font-mono);
+}
