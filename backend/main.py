@@ -11,9 +11,9 @@ from datetime import datetime
 # Importar text, Integer y ProgrammingError para la migración
 from sqlalchemy import Column, String, Boolean, DateTime, select, update, delete, Integer, text 
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncEngine, async_sessionmaker
-from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.exc import ProgrammingError # Para manejar la excepción de columna inexistente
+from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 
 # 1. Cargar variables de entorno
 # FIX 1: Cargar el archivo .env de forma robusta usando la ruta absoluta
@@ -83,35 +83,37 @@ app.add_middleware(
 
 # Función para asegurar que la tabla existe Y aplicar la migración si es necesaria
 async def create_db_and_tables():
+    # 1. PASO AISLADO: Creación/Migración de Esquema (ALTER TABLE)
+    # Esto debe ir fuera de la transacción principal para evitar el error de aborto.
     async with engine.begin() as conn:
-        # 1. Crear tablas si no existen (usa el modelo actual)
         await conn.run_sync(Base.metadata.create_all)
-
-        # 2. MIGRACIÓN ROBUSTA: Intentar añadir la columna 'year'. 
+        
         try:
             # Si la columna no existe, se añade.
             await conn.execute(
                 text("ALTER TABLE tasks ADD COLUMN year INTEGER")
             )
-            print("--- MIGRACIÓN: Columna 'year' añadida. ---")
+            print("--- MIGRACIÓN: Columna 'year' añadida exitosamente. ---")
+            
         except ProgrammingError as e:
-            # Si la columna ya existe, PostgreSQL lanza un error. 
-            # Capturamos el error y continuamos (es un fallo benigno).
+            # Captura el error si la columna ya existe, lo cual es esperado y benigno.
             if "already exists" in str(e):
                 print("--- MIGRACIÓN: Columna 'year' ya existe. (Ignorado) ---")
             else:
                 # Si es cualquier otro error de programación, lo relanzamos.
                 raise e
         except Exception as e:
-             # Capturar cualquier otro error durante la migración y notificar.
+             # Capturar cualquier otro error durante el esquema.
              print(f"--- MIGRACIÓN FALLIDA (ERROR GENERAL): {e} ---")
-             
-        # 3. (Opcional) Llenar los valores nulos de las tareas antiguas con el año 2025
-        # Esto asegura que los registros antiguos tengan un valor válido para el frontend.
+
+    # 2. PASO DE ACTUALIZACIÓN DE DATOS: Usar una NUEVA transacción para UPDATE
+    # Este paso es seguro porque la migración de esquema ya se completó o falló de forma aislada.
+    async with engine.begin() as conn:
+        # Llenar los valores nulos de las tareas antiguas con el año 2025
         await conn.execute(
-            text("UPDATE tasks SET year = 2025 WHERE year IS NULL")
+            text("UPDATE tasks SET year = EXTRACT(YEAR FROM due_date) WHERE year IS NULL") # Usa due_date para ser más preciso
         )
-        print("--- MIGRACIÓN DE DATOS: Valores 'year' nulos actualizados a 2025. ---")
+        print("--- MIGRACIÓN DE DATOS: Valores 'year' nulos actualizados. ---")
 
 
 @app.on_event("startup")
